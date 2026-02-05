@@ -1,0 +1,1 @@
+{"name":"Local: number_card","url":"c:\\Users\\SSAFY\\Desktop\\python-works\\2026_0203\\number_card.py","tests":[{"id":1770101326788,"input":"3\n5\n49679\n5\n08271\n10\n7797946543","output":"#1 9 2\n#2 8 1\n#3 7 3"}],"interactive":false,"memoryLimit":1024,"timeLimit":3000,"srcPath":"c:\\Users\\SSAFY\\Desktop\\python-works\\2026_0203\\number_card.py","group":"local","local":true}
