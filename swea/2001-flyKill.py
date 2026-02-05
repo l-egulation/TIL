@@ -3,10 +3,6 @@ T = int(input())
 for tc in range(1, T+1):
     N, M = map(int, input().split())
     arr = [list(map(int, input().split())) for _ in range(N)]
-    '''
-    그래서 M범위만큼 리스트 내부 슬라이싱해서 sum때리기
-    행 열 각각 N-M+1번 해야함 => N-M+1 * N-M+1
-    '''
 
     total_sum_lst = []
 
