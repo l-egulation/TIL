@@ -20,14 +20,23 @@ for tc in range(1, 11):
     '''
     num_palin = 0
 
+    # 행 순회 먼저 진행
     for r in range(8):
         for c in range(8-N+1):
+            # 행 순회를 진행하면서 원하는 범위, N만큼 슬라이싱을 진행
+            # 슬라이싱한 범위가 회문인지 검사 후 회문이면 +1
             h_lst = area[r][c:c+N]
             if h_lst[:N//2] == h_lst[:(N-1)//2:-1]:
                 num_palin += 1
     
+    # 열 순회 진행
     for r in range(8-N+1):
+        # 열 순회는 행 순회와 반대로 범위를 지정하면 열 순회
         for c in range(8):
+            # 행 순회를 할때는 행 마다 리스트로 되어있어서 바로 슬라이싱 후 검사가 됨
+            # 열 순회는 각 요소가 각기 다른 리스트에 있으므로 행 순회처럼 바로 검사가 안됨
+            # 그래서 빈 리스트에 요소를 하나씩 추가해서 그 리스트를 검사
+            # list comprehension으로 길이 줄임
             v_lst = [area[r+i][c] for i in range(N)]
             if v_lst[:N//2] == v_lst[:(N-1)//2:-1]:
                 num_palin += 1
