@@ -2,7 +2,7 @@ N = int(input())
 data = list(map(int, input().split()))
 
 '''
-🫧 버블 정렬(Bubble Sort)
+버블 정렬(Bubble Sort)
 버블 정렬은 '옆집'이랑만 비교해서 자리를 바꾸는 단순하고 정직한 정렬
 
 비교 : 인접한 두 숫자를 비교
