@@ -18,7 +18,7 @@ def permutation(count):
         
         visited[i] = 1
         pick_number.append(numbers[i])
-        fun(count+1)
+        permutation(count+1)
         visited[i] = 0
         pick_number.pop()
 
