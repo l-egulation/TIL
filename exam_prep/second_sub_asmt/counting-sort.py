@@ -18,7 +18,7 @@ data = list(map(int, input().split()))
 
 def counting_sort(lst):
     # 1. 준비 : 숫자 세기용 바구니(count)와 정렬 결과를 담을 그릇(temp) 생성
-    # max(lst)+1인 이유 : 인덱스 번호와 실제 숫자 값을 일치시키기 위함 (0~최댓값)
+    # max(lst)+1인 이유 > 인덱스 번호와 실제 숫자 값을 일치시키기 위함 (0~최댓값)
     count = [0] * (max(lst) + 1)
     temp = [0] * len(lst)
 
