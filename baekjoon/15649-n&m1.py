@@ -7,7 +7,7 @@ for num in range(1, N+1):
 pick_number = []
 visited = [0] * N
 
-def fun(count):
+def permutation(count):
     if count == M:
         print(*pick_number)
         return
@@ -22,4 +22,4 @@ def fun(count):
         visited[i] = 0
         pick_number.pop()
 
-fun(0)
+permutation(0)
