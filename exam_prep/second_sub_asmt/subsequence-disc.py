@@ -34,4 +34,4 @@ for tc in range(1, T+1):
     if idx_b == M:
         print(f'#{tc} YES')
     else:
-        print(f'{tc} NO')
+        print(f'#{tc} NO')
