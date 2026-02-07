@@ -39,5 +39,6 @@ def bubble_sort(lst, N):
                 lst[j], lst[j+1] = lst[j+1], lst[j]
                 
     return lst
+
 result = bubble_sort(N, data)
 print(result)
