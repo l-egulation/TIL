@@ -1,21 +1,30 @@
-N, M = map(int, input().split())
+n, m = map(int, input().split())
 
-arr_a = [list(map(int, input().split())) for _ in range(N)]
-arr_b = [list(map(int, input().split())) for _ in range(M)]
+a = [0]
+b = [0]
 
+# A의 입력
+for _ in range(n):
+    direction, time = input().split()
+    time = int(time)
 
-total_sum_lst = []
+    for t in range(time):
+        dx = 1 if direction == 'R' else -1
+        a.append(a[-1] + dx)
 
-for r in range(M-N+1):
-    for c in range(M-N+1):
-        current_sum = 0
+# B의 입력
+for _ in range(m):
+    direction, time = input().split()
+    time = int(time)
 
-        for i in range(N):
-            for j in range(N):
-                current_sum += arr_a[i][j] * arr_b[r+i][c+j]
-            
-        total_sum_lst.append(current_sum)
+    for t in range(time):
+        dx = 1 if direction == 'R' else -1
+        b.append(b[-1] + dx)
 
-ans = max(total_sum_lst)
+# 같아지는 시점 찾기
+for t in range(1, len(a)):
+    if a[t] == b[t]:
+        print(t)
+        exit()
 
-print(ans)
+print(-1)
