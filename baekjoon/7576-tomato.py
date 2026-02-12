@@ -21,17 +21,19 @@ for r in range(N):
 dr = [0, 0, -1, 1]
 dc = [-1, 1, 0, 0]
 
+depth = 0
 while queue:
-    x, y = queue.popleft()
+    for _ in range(len(queue)):
+        x, y = queue.popleft()
 
-    for i in range(4):
-        nx = x + dr[i]
-        ny = y + dc[i]
-        if 0 <= nx < N and 0 <= ny < M:
-            if graph[nx][ny] == 0 and not visited[nx][ny]:
-                visited[nx][ny] = visited[x][y] + 1
-                queue.append((nx, ny))
-
+        for i in range(4):
+            nx = x + dr[i]
+            ny = y + dc[i]
+            if 0 <= nx < N and 0 <= ny < M:
+                if graph[nx][ny] == 0 and not visited[nx][ny]:
+                    visited[nx][ny] = visited[x][y] + 1
+                    queue.append((nx, ny))
+    depth += 1
 ans = 0
 for r in range(N):
     for c in range(M):
