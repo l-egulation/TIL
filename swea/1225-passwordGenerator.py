@@ -2,12 +2,20 @@ from collections import deque
 
 for tc in range(1, 11):
     _ = int(input())
-    numbers = list(map(int, input().split()))
+    numbers = deque(map(int, input().split()))
 
-queue = deque()
+    found = False
+    while not found:
+        for i in range(1, 6):
+            number = numbers.popleft() - i
 
-print(numbers)
+            if number <= 0:
+                number = 0
+                numbers.append(number)
+                found = True
+                break
 
-for number in numbers:
-    print(number)
+            numbers.append(number)
 
+    print(f'#{tc}', end=' ')
+    print(*list(numbers))

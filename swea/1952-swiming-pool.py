@@ -19,28 +19,34 @@ DP로 푸는게 뭘까
 def dfs(month, fee):
     global answer
 
+    # 누적합이 최솟값보다 크다면 return
     if fee >= answer:
         return
 
+    # 12개월치를 다 계산했다면
     if month >= 12:
+        # 누적합(최솟값)이 연간 이용권 보다 작다면
         if answer > fee:
+            # 정답에 최솟값 할당
             answer = fee
         return
     
-    # 일권
-    dfs(month+1, fee + day_fee*days[month])
-    # 월권
-    dfs(month+1, fee + month_fee)
-    # 3개월권
+    # 1일 이용권 구매시
+    dfs(month+1, fee + daily_fee*days[month])
+    # 1개월 이용권 구매시
+    dfs(month+1, fee + monthly_fee)
+    # 3개월 이용권 구매시
     dfs(month+3, fee + quater_fee)
+
+'''
+1일 이용권으로 진행하다가 누적합이 연간 이용권보다 더 커지면
+백트레킹해서 1개월 이용권 구매로 넘아가는 느낌
+'''
 
 T = int(input())
 
 for tc in range(1, T+1):
-    # answer = float('inf')
-    # 이 문제의 최댓값은 1년 이용권
-
-    day_fee, month_fee, quater_fee, answer = map(int, input().split())
+    daily_fee, monthly_fee, quater_fee, answer = map(int, input().split())
     days = list(map(int, input().split()))
 
     # '월 - 1'이 idx값
