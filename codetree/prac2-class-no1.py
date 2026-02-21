@@ -35,10 +35,10 @@ for order in orders:
     if nr < 0 or nr > 30000 or nc < 0 or nc > 30000:
         continue
 
-    if (fx, fy) in forbidden:
+    if (nr, nc) in forbidden:
         continue
 
     r = nr
     c = nc
 
-print(nr, nc)
+print(r, c)
