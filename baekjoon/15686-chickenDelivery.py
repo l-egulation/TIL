@@ -29,9 +29,9 @@
 graph에서 선택한 2를 제외하고 재측정?
 > 좀 비효율적인거 같은데
 > 그냥 min, max 측정할때 더해서 측정하고 싶은데
-'''
 
-'''
+문제를 회고하며, Gemini에게 도움을 받으며 느낀점
+
 문제 1. bfs문제가 아니였음
 > 치킨집까지 최소 거리라고 해서 당연히 bfs인줄 알았음
 > bfs로 아무리 해답을 찾아봐도 안나오는 이유가 있었음
@@ -47,54 +47,76 @@ graph에서 선택한 2를 제외하고 재측정?
 '''
 
 import sys
-from collections import deque
 
 input = sys.stdin.readline
 
+# 조합을 임시로 담을 리스트
 temp = []
+# 최종 결과값 무한대로 초기화
+ans = float('inf')
 
+# 치킨집 M개를 뽑는 조합 함수
 def comb(count, idx):
+    # 전역 변수 ans 사용 설정
+    global ans
+
+    # M개를 모두 다 뽑았다면
     if count == M:
-        comb_chickens.append(temp[:])
+        # 도시의 치킨 거리 합산용 변수
+        city_chicken_dist = 0
+    
+        # 각 집마다 모든 치킨집과의 거리 계산
+        for hr, hc in houses:
+            # 해당 집의 최소 치킨 거리 초기화
+            min_dist = float('inf')
+            # 현재 선택된(temp) 치킨집들과 거리 비교
+            for cr, cc in temp:
+                # 거리 계산 공식 적용
+                dist = abs(hr - cr) + abs(hc - cc)
+                # 그중 가장 가까운 치킨집 거리 찾기
+                min_dist = min(min_dist, dist)
+            
+            # 이 집의 치킨 거리를 도시 합계에 누적
+            city_chicken_dist += min_dist
+        
+        # 현재 조합의 합계가 전체 최솟값보다 작으면 갱신
+        ans = min(ans, city_chicken_dist)
+        # 조건 만족했으므로 리턴
         return
     
+    # 아직 M개를 다 못 뽑았으면 남은 치킨집 순회
     for i in range(idx, len(chickens)):
+        # i번째 치킨집을 조합에 추가
         temp.append(chickens[i])
 
+        # 다음 치킨집을 뽑으러 재귀 호출
         comb(count+1, i+1)
 
+        # 재귀 끝나고 나오면 마지막 요소 제거(백트래킹)
         temp.pop()
 
+# 도시 크기 N, 남길 치킨집 M 입력
 N, M = map(int, input().split())
 
+# 지도 전체 정보 입력 받기
 graph = [list(map(int, input().split())) for _ in range(N)]
 
+# 집과 치킨집 좌표 저장용 리스트
 houses = []
 chickens = []
-comb_chickens = []
 
+# 지도 순회하며 좌표들 분류하기
 for r in range(N):
     for c in range(N):
+        # 1이라면 집 좌표 추가
         if graph[r][c] == 1:
             houses.append((r, c))
+        # 2라면 치킨집 좌표 추가
         elif graph[r][c] == 2:
             chickens.append((r, c))
 
+# 0번 인덱스부터 조합 찾기 시작
 comb(0, 0)
 
-ans = float('inf')
-
-for selects in comb_chickens:
-    city_chicken_dist = 0
-    
-    for hr, hc in houses:
-        min_dist = float('inf')
-        for cr, cc in selects:
-            dist = abs(hr - cr) + abs(hc - cc)
-            min_dist = min(min_dist, dist)
-        
-        city_chicken_dist += min_dist
-    
-    ans = min(ans, city_chicken_dist)
-
+# 최종적인 도시의 치킨 거리 최솟값 출력
 print(ans)
