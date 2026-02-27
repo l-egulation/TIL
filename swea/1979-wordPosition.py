@@ -5,7 +5,7 @@ for tc in range(1, T+1):
     area = [list(map(int, input().split())) for _ in range(N)]
 
     '''
-    영역을 순회하면서 1을 만나면 count +1 
+    영역을 순회하면서 1을 만나면 count +1
     > 근데 가다가 0을 만나면 count = 0, 0으로 초기화
     >> 단어가 들어갈 자리가 못되므로 0으로 초기화하고, 검은색 지나서 다음부터 다시 셀 수 있도록 설계
     > count = K 가 되면, answer +1
