@@ -12,7 +12,7 @@ for tc in range(1, T+1):
     # 상 하 좌 우
     dr = [0, 0, -1, 1]
     dc = [-1, 1, 0, 0]
-    
+
     # 괴물의 위치(시작점) 찾기
     for r in range(N):
         for c in range(N):
@@ -36,7 +36,7 @@ for tc in range(1, T+1):
                 # 진행하다가 1(벽)을 만나면 중단
                 elif area[nr][nc] == 1:
                     break
-    
+
     target = 0
     answer = sum(row.count(target) for row in area)
     print(f'#{tc} {answer}')
