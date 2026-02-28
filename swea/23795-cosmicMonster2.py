@@ -21,7 +21,6 @@ for tc in range(1, T+1):
                 start_r = r
                 start_c = c
                 monster_lst.append((start_r, start_c))
-    # monster_lst = [(a, b), (c, d)]
 
     for r, c in monster_lst:
         # 4방향으로 탐
