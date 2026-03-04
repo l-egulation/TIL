@@ -31,37 +31,105 @@
 자꾸 안되는걸 쳐 잡고 있으니까 못 풀지 싀이발 하
 접어 걍 싸탈해
 
+# 1. 핵심 설계 포인트 (Key Realizations)
+
+(1) 제약 조건의 힌트:
+    - 두께 D가 최대 13으로 매우 작음. 이는 각 행마다 선택지(안함, A, B)를 두는
+    3^D 방식의 완전 탐색이 가능하다는 강력한 힌트임.
+
+(2) 성능 검사(is_pass)의 효율성:
+    - 모든 열이 '각각' 조건을 만족해야 하므로, 하나라도 실패하면 즉시 False를 반환함.
+    - K=1인 경우 탐색 자체가 무의미하므로 예외 처리를 통해 시간을 절약함.
+
+(3) 백트래킹과 가지치기 (Pruning):
+    - "최소" 횟수를 찾는 문제이므로, 탐색 도중 이미 현재 최솟값(min_ans)을
+    넘어선 투약 횟수(use_count)를 가지면 그 줄기는 더 이상 볼 필요가 없음.
+    - 이 한 줄의 가지치기가 실행 시간을 획기적으로 단축함.
+
 '''
 
+import sys
+
+# 1. 성능 검사 함수: 모든 열이 K개 이상의 연속된 특성을 가졌는지 확인
 def is_pass():
+    # 열(W) 방향으로 한 열씩 검사
     for c in range(W):
         passed_col = False
+        # 연속된 특성의 개수 (첫 칸부터 시작하므로 1)
         count = 1
 
-        if K == 1:
-            continue
-
+        # 행(D) 방향으로 내려가며 비교
         for r in range(1, D):
+            # 이전 칸과 특성이 같다면
             if films[r][c] == films[r-1][c]:
                 count += 1
+            # 특성이 다르다면 다시 1부터 카운트
             else:
                 count = 1
 
+            # 연속 개수가 K에 도달하면 이 열은 합격
             if count >= K:
                 passed_col = True
                 break
 
+        # 단 한 열이라도 불합격이면 전체 불합격
         if not passed_col:
             return False
 
+    # 모든 열을 무사히 통과하면 전체 합격
     return True
 
+# 2. 백트래킹 DFS 함수
+def dfs(row_idx, use_count):
+    global min_ans
+
+    # 현재 투약 횟수가 이미 찾은 최솟값보다 크거나 같으면 더 볼 필요 없음
+    if use_count >= min_ans:
+        return
+
+    # 마지막 행까지 모든 결정을 내렸을 때 성능 검사 실시
+    if row_idx == D:
+        if is_pass():
+            # 합격했다면 최솟값 갱신
+            min_ans = use_count
+        return
+
+    # 세 가지 선택지 탐색
+
+    # 1. 약품 투약 안 함: 원래 상태 그대로 다음 행으로 진행
+    dfs(row_idx + 1, use_count)
+
+    # 원래 행의 상태를 백업 (되돌리기 위해 필요)
+    backup_row = films[row_idx][:]
+
+    # 2. A 약품 투약: 해당 행을 모두 0으로 변경 후 다음 행으로 진행
+    films[row_idx] = [0] * W
+    dfs(row_idx + 1, use_count + 1)
+
+    # 3. B 약품 투약: 해당 행을 모두 1로 변경 후 다음 행으로 진행
+    films[row_idx] = [1] * W
+    dfs(row_idx + 1, use_count + 1)
+
+    # 원상 복구 : 다음 탐색 줄기를 위해 원래 상태로 되돌림 (Backtracking)
+    films[row_idx] = backup_row
+
+input = sys.stdin.readline
 T = int(input())
 
-for tc in range(1, T+1):
+for tc in range(1, T + 1):
+    # 두께, 가로폭, 합격기준
     D, W, K = map(int, input().split())
     films = [list(map(int, input().split())) for _ in range(D)]
 
-    answer = K
+    # K가 1이면 무조건 통과이므로 탐색 없이 0 출력
+    if K == 1:
+        print(f'#{tc} 0')
+        continue
 
-    print(f'#{tc} {answer}')
+    # 최솟값의 초기값은 최대 투약 가능 횟수인 K로 설정
+    min_ans = K
+
+    # 0번 행부터, 투약 횟수 0회로 탐색 시작
+    dfs(0, 0)
+
+    print(f'#{tc} {min_ans}')
