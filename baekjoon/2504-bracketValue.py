@@ -39,4 +39,8 @@ for i in range(len(bracket)):
         stack.pop()
         temp //= 3
 
-print(result)
+# 모든 검사가 끝난 후 스택에 괄호가 남아있다면 잘못된 괄호열!
+if stack:
+    print(0)
+else:
+    print(result)
