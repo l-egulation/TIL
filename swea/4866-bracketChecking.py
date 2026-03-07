@@ -32,12 +32,12 @@ for tc in range(1, T+1):
                 result = 0
                 #이미 실패라 다 볼 필요가 없음
                 break
-        
+
         elif word == '}':
             if not stack or stack.pop() != '{':
                 result = 0
                 break
-    
+
     # 마지막까지 조사해서 스택에 괄호가 남아있으면 실패
     if stack:
         result = 0
