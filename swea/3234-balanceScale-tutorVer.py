@@ -15,7 +15,7 @@ def dfs(count, visited, left, right):
 
     for i in range(N):
         # i번째 무게추를 골랐다면 건너뛰기
-        if visited & (i << i):
+        if visited & (1 << i):
             continue
 
         dfs(count+1, visited | (1 << i), left + weights[i], right)
