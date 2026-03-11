@@ -34,7 +34,18 @@
 - N x N 그리드에서 가장자리를 제외한 코어(1)들을 최소한의 전선(2)으로 최대한 많이 연결하기.
 - 1순위: 최대한 많은 코어 연결 / 2순위: 전선 길이의 합 최소화.
 
---------------------------------------------------
+-------------------------------------
+
+[회고록]
+
+# 0. 전체 로직 흐름 (Logic Flow)
+1. 전처리: 가장자리 코어는 이미 전원이 공급되므로 제외. 사방이 막힌 고립 코어도 탐색에서 제외
+2. 탐색: DFS를 이용해 각 코어마다 [상, 하, 좌, 우, 연결 안 함] 5가지 선택지를 시도
+3. 검증: 전선을 놓기 전 'is_connect'로 경로 확인. 가능하면 'fill_wire'로 전선 설치
+4. 백트래킹: 한 방향 탐색이 끝나면 'fill_wire'를 다시 호출해 전선을 지우고(0) 다음 경우의 수 시도
+5. 최적화: 현재까지 연결된 코어 + 남은 코어 < 기존 기록이면 가차 없이 탐색 종료(가지치기)
+
+-------------------------------------
 
 # 1. 핵심 설계 포인트 (Key Realizations)
 
@@ -54,7 +65,7 @@
     - 발전: 전선을 놓은 길만 다시 '0'으로 지워주는(Clear) 방식 선택.
     - 이유: N=12일 때, 매번 배열을 복사하는 오버헤드를 줄여 메모리와 실행 속도를 최적화함.
 
---------------------------------------------------
+-------------------------------------
 
 # 2. 셀프 피드백 (Self-Feedback)
 
@@ -122,13 +133,15 @@
 #                     curr_wire_count += k
 #                     return
 
+# 전선 설치/제거 함수 (num: 2면 설치, 0이면 제거)
 def fill_wire(idx, dir, num):
     r, c = start_lst[idx] # 현재 탐색 중인 코어의 좌표를 가져옴
     count = 0 # 새로 깔린 전선의 길이를 셀 변수
 
     nr, nc = r, c
     while True:
-        nr += dr[dir] # 해당 방향으로 한 칸 이동
+        # 해당 방향으로 한 칸 이동
+        nr += dr[dir]
         nc += dc[dir]
 
         # 경계를 벗어나면 전선 설치 완료
@@ -139,6 +152,7 @@ def fill_wire(idx, dir, num):
         count += 1 # 전선 길이 증가
     return count # 총 설치된 전선 길이를 반환 (wire_count 누적용)
 
+# 해당 방향으로 전선 설치가 가능한지 체크
 def is_connect(idx, dir):
     r, c = start_lst[idx]
     nr, nc = r, c
@@ -155,6 +169,7 @@ def is_connect(idx, dir):
         if area[nr][nc] != 0:
             return False
 
+# 백트래킹 탐색 본체
 def dfs(idx, curr_core_count, curr_wire_count):
     global total_core_count, total_wire_count
 
@@ -178,7 +193,7 @@ def dfs(idx, curr_core_count, curr_wire_count):
         if is_connect(idx, dir): # 연결 가능하면
             length = fill_wire(idx, dir, 2) # 전선 깔기 (2로 표시)
             dfs(idx + 1, curr_core_count + 1, curr_wire_count + length) # 다음 코어로 진행
-            fill_wire(idx, dir, 0) # (중요) 다음 탐색을 위해 전선 다시 지우기 (복구)
+            fill_wire(idx, dir, 0) # (중요) 다음 탐색을 위해 전선 다시 지우기 > 복구
 
     # [경우의 수 5] 현재 코어를 연결하지 않고 그냥 건너뛰는 경우
     dfs(idx + 1, curr_core_count, curr_wire_count)
