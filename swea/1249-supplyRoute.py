@@ -13,7 +13,7 @@ def dijkstra():
     # 출발점(0, 0)의 가중치는 0이고, 나머지 모든 지점까지의 거리는 무한대로 설정
     pq = [(0, 0, 0)]
     dist_lst = [[float('inf')] * N for _ in range(N)]
-    dist_lst[0, 0] = 0
+    dist_lst[0][0] = 0
 
     while pq:
         # 가중치가 가장 낮은 노드를 추출
